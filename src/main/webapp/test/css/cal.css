@@ -1,0 +1,43 @@
+@charset "UTF-8";
+
+#cal-div {
+    margin: 0 auto;
+    text-align: center;
+}
+
+#cal-div-1 {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.txtbox {
+    height: 30px;
+    margin: 15px;
+}
+
+#sel {
+    width: 50px;
+    height: 30px;
+    font-size: 15px;
+}
+
+#cal-div-2 {
+    text-align: center;
+}
+
+#div-spn {
+	margin: 30px 0 30px 30px;
+}
+
+.btn {
+    width: 70px;
+    height: 40px;
+    background-color: white;
+    cursor: pointer;
+    border: 1px solid gray;
+}
+
+.btn:hover {
+    background-color: black;
+    color: white;
+}

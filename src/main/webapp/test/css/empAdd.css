@@ -1,0 +1,64 @@
+@charset "UTF-8";
+
+#article {
+    margin: 0 auto;
+}
+
+#section {
+    margin: 30px 0 30px 0 30px;
+}
+
+#section h1 {
+    text-align: center;
+}
+
+#section fieldset {
+    width: 50%;
+    margin: 30px auto;
+}
+
+#tb1 {
+    margin: 50px auto;
+    border-collapse: collapse;
+}
+
+#tb1 tr th {
+    border: 1px solid gray;
+    padding: 30px;
+}
+#tb1 tr td {
+    border: 1px solid gray;
+    padding: 30px;
+}
+
+.box {
+    height: 30px;
+}
+
+.btn {
+    width: 100px;
+    height: 40px;
+    border: 1px solid gray;
+    cursor: pointer;
+}
+
+.btn1 {
+    background-color: black;
+    color: white;
+}
+
+.btn1:hover {
+    background-color: blue;
+}
+
+.btn1:active {
+	background-color: darkblue;
+}
+
+.btn2 {
+	background-color: white;
+}
+
+.btn2:active {
+	background-color: #f7f7f7;
+}

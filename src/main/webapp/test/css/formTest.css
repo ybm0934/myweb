@@ -1,0 +1,23 @@
+@charset "UTF-8";
+
+h1 {
+	text-align: center;
+}
+
+fieldset {
+	width: 80%;
+	margin: 0 auto;
+}
+
+fieldset li {
+	list-style-type: none;
+}
+
+fieldset label {
+	width: 90px;
+	float: left;
+}
+
+fieldset #btn-div {
+	text-align: center;
+}
