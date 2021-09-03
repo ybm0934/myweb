@@ -49,20 +49,15 @@
 		
 		if(!(name == name_ok)){
 			alert('이름이 잘못 되었습니다.');
-			document.getElementById('name_ok').value = " ";
+			document.getElementById('name_ok').value = "";
 			document.getElementById('name_ok').focus();
-			
-			e.preventDefault();
 		}else {
 			document.empDelete.submit();
 		}
 	}
 
-	function reset_btn(){
-		document.getElementById('name').value = " ";
-		document.getElementById('email').value = " ";
-		document.getElementById('dept').value = " ";
-		document.getElementById('name_ok').value = " ";
+	function back_btn(){
+		location.href = 'empList.jsp';
 	}
 </script>
 </head>
@@ -70,11 +65,11 @@
 <%@ include file="header.jsp" %>
     <div id="article">
         <div id="section">
-            <h1>사원 관리 프로그램</h1>
+            <%@ include file="empHome.jsp" %>
             <form name="empDelete" method="post" action="empDelete_ok.jsp">
                 <fieldset>
                     <legend>사원삭제</legend>
-                    <input type="hidden" name="empno" value="<%=empno %>" disabled="disabled">
+                    <input type="hidden" name="empno" value="<%=empno %>" readonly="readonly">
                     <table id="tb1">
                         <tr>
                             <th>사원이름</th>
@@ -103,7 +98,7 @@
                         <tr>
                             <td colspan="2" align="center">
                                 <input type="button" value="삭제하기" class="btn btn1" onclick="delete_btn();">
-                                <input type="button" value="리셋" class="btn btn2" onclick="reset_btn();">
+                                <input type="button" value="돌아가기" class="btn btn2" onclick="back_btn();">
                             </td>
                         </tr>
                     </table>

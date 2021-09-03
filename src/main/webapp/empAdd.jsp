@@ -11,7 +11,19 @@
 <script>
 	$(document).ready(function(){
 		$('#add').click(function(){
-			$("#empAdd").submit();
+			
+			if($('#name').val() == ''){
+				alert('이름을 입력하세요.');
+				$('#name').focus();
+			}else if($('#email').val() == ''){
+				alert('이메일을 입력하세요.');
+				$('#email').focus();
+			}else if($('#dept').val() == ''){
+				alert('부서명을 입력하세요.');
+				$('#dept').focus();
+			}else {
+				$("#empAdd").submit();
+			}
 		});
 	});
 </script>
@@ -20,7 +32,7 @@
 <%@ include file="header.jsp" %>
     <div id="article">
         <div id="section">
-            <h1>사원 관리 프로그램</h1>
+            <%@ include file="empHome.jsp" %>
             <form name="empAdd" id="empAdd" method="post" action="empAdd_ok.jsp">
                 <fieldset>
                     <legend>사원등록</legend>
@@ -28,19 +40,19 @@
                         <tr>
                             <th>사원이름</th>
                             <td>
-                                <input type="text" name="name" class="box" autofocus="autofocus">
+                                <input type="text" name="name" id="name" class="box" autofocus="autofocus">
                             </td>
                         </tr>
                         <tr>
                             <th>E-mail</th>
                             <td>
-                                <input type="text" name="email" class="box">
+                                <input type="text" name="email" id="email" class="box">
                             </td>
                         </tr>
                         <tr>
                             <th>부서명</th>
                             <td>
-                                <input type="text" name="dept" class="box">
+                                <input type="text" name="dept" id="dept" class="box">
                             </td>
                         </tr>
                         <tr>

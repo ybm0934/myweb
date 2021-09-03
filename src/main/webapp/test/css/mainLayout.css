@@ -65,3 +65,15 @@ footer {
 	clear: both;
 	text-align: center;
 }
+
+#empH1 {
+	margin: 55px 0 55px 0;
+}
+
+#empHome {
+	color : black;
+}
+
+#empHome:hover {
+	color: #a42222;
+}

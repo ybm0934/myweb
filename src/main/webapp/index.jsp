@@ -1,5 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%
+	String ip = request.getRemoteAddr();
+	int port = request.getRemotePort();
+	System.out.println("ip 주소 : " + ip);
+	System.out.println("포트번호 : " + port);
+%>
 <!DOCTYPE html>
 <html>
 <head>

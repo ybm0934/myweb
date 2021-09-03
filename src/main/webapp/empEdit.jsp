@@ -43,10 +43,29 @@
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/test/css/mainLayout.css">
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/test/css/empAdd.css">
 <script>
+	function edit_btn(){
+		var name = document.getElementById('name').value;
+		var email = document.getElementById('email').value;
+		var dept = document.getElementById('dept').value;
+		
+		if(name == ""){
+			alert('이름을 입력하세요.');
+			document.getElementById('name').focus();
+		}else if(email == ""){
+			alert('이메일을 입력하세요.');
+			document.getElementById('email').focus();
+		}else if(dept == ""){
+			alert('부서명을 입력하세요.');
+			document.getElementById('dept').focus();
+		}else {
+			document.empEdit.submit();
+		}
+	}
+
 	function reset_btn(){
-		document.getElementById('name').value = " ";
-		document.getElementById('email').value = " ";
-		document.getElementById('dept').value = " ";
+		document.getElementById('name').value = "";
+		document.getElementById('email').value = "";
+		document.getElementById('dept').value = "";
 	}
 	
 	function back_btn(){
@@ -58,11 +77,11 @@
 <%@ include file="header.jsp" %>
     <div id="article">
         <div id="section">
-            <h1>사원 관리 프로그램</h1>
+            <%@ include file="empHome.jsp" %>
             <form name="empEdit" id="empEdit" method="post" action="empEdit_ok.jsp">
                 <fieldset>
                     <legend>사원수정</legend>
-                    <input type="hidden" name="empno" value="<%=empno %>" disabled="disabled">
+                    <input type="hidden" name="empno" value="<%=empno %>" readonly="readonly">
                     <table id="tb1">
                         <tr>
                             <th>사원이름</th>
@@ -84,7 +103,7 @@
                         </tr>
                         <tr>
                             <td colspan="2" align="center">
-                                <input type="submit" value="수정완료" class="btn btn1">
+                                <input type="button" value="수정완료" class="btn btn1" onclick="edit_btn();">
                                 <input type="button" value="리셋" class="btn btn2" onclick="reset_btn();">
                                 <input type="button" value="돌아가기" class="btn btn2" onclick="back_btn();">
                             </td>

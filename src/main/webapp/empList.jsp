@@ -18,7 +18,7 @@
 	String[] select = {""};
 	String where = "";
 	
-	if(request.getParameterValues("select") != null){
+	if(request.getParameterValues("select") != null && word.length() > 0) {
 		select = request.getParameterValues("select");
 		
 		if (select[0].equals("empno")) {
@@ -69,7 +69,7 @@
 <%@ include file="header.jsp" %>
     <div id="article">
         <div id="section">
-            <h1>사원 관리 프로그램</h1>
+            <%@ include file="empHome.jsp" %>
             <form name="listForm" action="empList.jsp">
 	            <div id="search-div">
 	            	<select name="select" id="search-select">
