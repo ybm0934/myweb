@@ -17,7 +17,7 @@
 	
 	Connection con = DriverManager.getConnection(url, user, pwd);
 	
-	String sql = "insert into employee values(employee_seq.nextval, ?, ?, ?)";
+	String sql = "insert into employee values(employee_seq.nextval, ?, ?, ?, sysdate)";
 	
 	PreparedStatement ps = con.prepareStatement(sql);
 	ps.setString(1, name);

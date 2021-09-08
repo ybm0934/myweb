@@ -6,10 +6,10 @@
         <nav>
             <ul>
                 <li>
-                    <a href="index.jsp">Home</a>
+                    <a href="<%=request.getContextPath() %>/index.jsp">Home</a>
                 </li>
                 <li>
-                    <a href="profile.jsp">Profile</a>
+                    <a href="<%=request.getContextPath() %>/profile.jsp">Profile</a>
                 </li>
                 <li>
                     <a href="#">Board</a>

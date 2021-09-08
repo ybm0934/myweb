@@ -22,13 +22,13 @@
 		select = request.getParameterValues("select");
 		
 		if (select[0].equals("empno")) {
-			where += " where empno like ?";
+			where += " where empno like '%' || ? || '%'";
 		} else if (select[0].equals("name")) {
-			where += " where name like ?";
+			where += " where name like '%' || ? || '%'";
 		} else if (select[0].equals("email")) {
-			where += " where email like ?";
+			where += " where email like '%' || ? || '%'";
 		} else if (select[0].equals("dept")) {
-			where += " where dept like ?";
+			where += " where dept like '%' || ? || '%'";
 		}
 	}
 

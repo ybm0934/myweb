@@ -26,6 +26,7 @@
                 <li><a href="formTest.jsp">폼 테스트</a></li>
                 <li><a href="cal.jsp">사칙 계산기</a></li>
                 <li><a href="empList.jsp">사원 관리 프로그램(원시형)</a></li>
+                <li><a href="emp2/empList2.jsp">사원 관리 프로그램(Beans)</a></li>
             </ul>
         </article>
     </section>
