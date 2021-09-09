@@ -2,23 +2,26 @@ package yong.emp;
 
 import java.sql.*;
 import java.util.*;
+import javax.naming.*;
+import javax.sql.*;
+
+import javax.naming.InitialContext;
 
 public class EmpDAO {
 
-	private ConnectionPoolMgr pool;
 	private Connection con;
 	private PreparedStatement ps;
 	private ResultSet rs;
 
 	public EmpDAO() {
-		pool = new ConnectionPoolMgr();
+
 	}
 
 	public int empAdd(EmpDTO dto) throws SQLException {
 		try {
 			System.out.println("empAdd() 실행");
 
-			con = pool.getConnection();
+			con = yong.db.YongDB.getConn();
 
 			String sql = "insert into employee values(employee_seq.nextval, ?, ?, ?, sysdate)";
 
@@ -37,7 +40,10 @@ public class EmpDAO {
 
 			return -1;
 		} finally {
-			pool.dbClose(ps, con);
+			if (ps != null)
+				ps.close();
+			if (con != null)
+				con.close();
 		}
 	}// empAdd
 
@@ -49,14 +55,14 @@ public class EmpDAO {
 			System.out.println("empList() 실행");
 			System.out.println("category : " + category + ", word : " + word);
 
-			con = pool.getConnection();
+			con = yong.db.YongDB.getConn();
 
 			String sql = "select * from employee";
 
 			if (word != null && !(word.isEmpty())) {
-				if(!(category.equals("empno"))) {
+				if (!(category.equals("empno"))) {
 					sql += " where " + category + " like '%" + word + "%'";
-				}else {
+				} else {
 					sql += " where " + category + " like '" + word + "'";
 				}
 			}
@@ -89,7 +95,12 @@ public class EmpDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			pool.dbClose(rs, ps, con);
+			if (rs != null)
+				rs.close();
+			if (ps != null)
+				ps.close();
+			if (con != null)
+				con.close();
 		}
 
 		return list;
@@ -101,7 +112,7 @@ public class EmpDAO {
 		try {
 			System.out.println("empDetail 실행");
 
-			con = pool.getConnection();
+			con = yong.db.YongDB.getConn();
 
 			String sql = "select * from employee where empno = ?";
 
@@ -127,7 +138,12 @@ public class EmpDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			pool.dbClose(rs, ps, con);
+			if (rs != null)
+				rs.close();
+			if (ps != null)
+				ps.close();
+			if (con != null)
+				con.close();
 		}
 
 		return dto;
@@ -139,7 +155,7 @@ public class EmpDAO {
 		try {
 			System.out.println("empDelete() 실행");
 
-			con = pool.getConnection();
+			con = yong.db.YongDB.getConn();
 
 			String sql = "delete from employee where empno = ? and name = ?";
 
@@ -153,7 +169,10 @@ public class EmpDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			pool.dbClose(ps, con);
+			if (ps != null)
+				ps.close();
+			if (con != null)
+				con.close();
 		}
 
 		return cnt;
@@ -165,7 +184,7 @@ public class EmpDAO {
 		try {
 			System.out.println("empEdit() 실행");
 
-			con = pool.getConnection();
+			con = yong.db.YongDB.getConn();
 
 			String sql = "update employee set name = ?, email = ?, dept = ? where empno = ?";
 
@@ -181,7 +200,10 @@ public class EmpDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			pool.dbClose(ps, con);
+			if (ps != null)
+				ps.close();
+			if (con != null)
+				con.close();
 		}
 
 		return cnt;

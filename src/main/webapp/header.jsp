@@ -1,7 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <header>
-        <div>로그인 | 회원가입</div>
+        <div>
+        	<a href="<%=request.getContextPath() %>/member/login.jsp">로그인</a>
+        	 | 
+        	<a href="<%=request.getContextPath() %>/member/register.jsp">회원가입</a>
+        </div>
         <h1>JSP Study Site</h1>
         <nav>
             <ul>

@@ -1,0 +1,52 @@
+@charset "UTF-8";
+
+#idCheck_div {
+	margin: 120px auto;
+	text-align: center;
+}
+
+input:focus {
+    outline: none;
+}
+
+#top {
+	margin-top: 30px;
+	padding: 15px;
+}
+
+#top .textbox {
+	padding: 13px;
+	vertical-align: middle;
+}
+
+#print {
+	padding: 15px;
+	color: red;
+	font-weight: bold;
+}
+
+#bottom {
+	padding: 15px;
+}
+
+.btn {
+	border: 1px solid #be4646;
+	background-color: #be4646;
+	color: white;
+	font-size: 15px;
+	width: 80px;
+	height: 45px;
+	font-weight: bold;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+.btn:hover {
+	border: 1px solid red;
+	background-color: red;
+}
+
+.btn:active {
+	border: 1px solid #be4646;
+	background-color: #be4646;
+}
