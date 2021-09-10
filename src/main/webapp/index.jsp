@@ -1,19 +1,41 @@
+<%@page import="java.net.*"%>
+<%@page import="java.util.*"%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
-	String ip = request.getRemoteAddr();
-	int port = request.getRemotePort();
-	System.out.println("ip 주소 : " + ip);
-	System.out.println("포트번호 : " + port);
+	InetAddress inetIp = InetAddress.getLocalHost();
+	String ip = inetIp.getHostAddress();
+	
+	Cookie[] cks = request.getCookies();
+	
+	String str = "첫 방문이시군요!";
+	if(cks != null) {
+		for(int i = 0; i < cks.length; i++) {
+			String key = URLDecoder.decode(cks[i].getName());
+			if(key.equals(ip)) {
+				str = URLDecoder.decode(cks[i].getValue());
+			}
+		}
+	}
 %>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/test/css/mainLayout.css">
+<script>
+	function popup(){
+		var width = '500';
+		var height = '500';
+		var wx = (window.screen.width / 2) - (width / 2);
+		var wy = (window.screen.height / 2) - (height / 2);
+		window.open('popup.jsp', '팝업창', 'width=' + width + ', height=' + height + ', left=' + wx + ', top=' + wy);
+	}
+</script>
 </head>
-<body>
+<body onload="popup();">
 <%@include file="header.jsp" %>
     <section id="mainSec">
         <article id="mainImg">
@@ -21,6 +43,7 @@
         </article>
         <article id="minMenu">
             <h2>안녕하세요.</h2>
+            <h3>마지막 접속일 : <%=str %></h3>
             <ul>
                 <li>아래에 기능들이 추가될 것임</li>
                 <li><a href="formTest.jsp">폼 테스트</a></li>
@@ -33,3 +56,14 @@
 <%@include file="footer.jsp" %>
 </body>
 </html>
+<%
+	Calendar cal = Calendar.getInstance();
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일 HH시 mm분 ss초");
+	String date = sdf.format(cal.getTime());
+	date = URLEncoder.encode(date);
+	
+	Cookie ck = new Cookie(ip, date);
+	ck.setMaxAge(60 * 60 * 24 * 30);
+	
+	response.addCookie(ck);
+%>
