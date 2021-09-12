@@ -4,12 +4,29 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
-	InetAddress inetIp = InetAddress.getLocalHost();
-	String ip = inetIp.getHostAddress();
-	
+	String ip = request.getRemoteAddr();
+
 	Cookie[] cks = request.getCookies();
 	
-	String str = "첫 방문이시군요!";
+	String name = "";
+	String value = "";
+	if(cks != null) {
+		for(int i = 0; i < cks.length; i++){
+			name = cks[i].getName();
+			value = cks[i].getValue();
+		}//for
+	}//if
+	
+	String popcheck = "false";
+	if(name.equals("check24") && value.equals(ip)){
+		popcheck = "true";
+	}
+
+	/*
+	Cookie[] cks = request.getCookies();
+	
+	String key = "";
+	String value = "";
 	if(cks != null) {
 		for(int i = 0; i < cks.length; i++) {
 			String key = URLDecoder.decode(cks[i].getName());
@@ -18,6 +35,8 @@
 			}
 		}
 	}
+	
+	String str = "첫 방문이시군요!"; */
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -26,6 +45,14 @@
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/test/css/mainLayout.css">
 <script>
+	window.onload = function(){
+		var popcheck = document.getElementById('popcheck').value;
+		
+		if(popcheck == 'false'){
+			popup();
+		}
+	}
+	
 	function popup(){
 		var width = '500';
 		var height = '500';
@@ -35,7 +62,8 @@
 	}
 </script>
 </head>
-<body onload="popup();">
+<body>
+<input type="hidden" id="popcheck" value="<%=popcheck %>">
 <%@include file="header.jsp" %>
     <section id="mainSec">
         <article id="mainImg">
@@ -43,7 +71,7 @@
         </article>
         <article id="minMenu">
             <h2>안녕하세요.</h2>
-            <h3>마지막 접속일 : <%=str %></h3>
+            <h3>마지막 접속일 : </h3>
             <ul>
                 <li>아래에 기능들이 추가될 것임</li>
                 <li><a href="formTest.jsp">폼 테스트</a></li>
@@ -56,8 +84,8 @@
 <%@include file="footer.jsp" %>
 </body>
 </html>
-<%
-	Calendar cal = Calendar.getInstance();
+<%/*
+	 Calendar cal = Calendar.getInstance();
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일 HH시 mm분 ss초");
 	String date = sdf.format(cal.getTime());
 	date = URLEncoder.encode(date);
@@ -65,5 +93,6 @@
 	Cookie ck = new Cookie(ip, date);
 	ck.setMaxAge(60 * 60 * 24 * 30);
 	
-	response.addCookie(ck);
+	response.addCookie(ck); 
+	*/
 %>
