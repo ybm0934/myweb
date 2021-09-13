@@ -12,5 +12,5 @@
 %>
 
 <script>
-	self.close();
+	window.close();
 </script>
