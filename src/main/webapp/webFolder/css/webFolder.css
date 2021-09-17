@@ -1,0 +1,31 @@
+@charset "UTF-8";
+
+#f_sec h2 {
+	text-align: center;
+}
+
+#f_sec fieldset {
+	width: 550px;
+	margin: 0px auto;
+}
+
+#f_sec table {
+	width: 500px;
+	margin: 0 auto;
+	border-top: 3px double darkblue;
+	border-bottom: 3px double darkblue;
+}
+
+#f_sec table thead th {
+	background-color: skyblue;
+}
+
+#f_sec fieldset label {
+	width: 90px;
+	float: left;
+}
+
+#f_sec fieldset meter {
+	width: 250px;
+	float: left;
+}

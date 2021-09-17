@@ -6,25 +6,35 @@
 <%
 	String ip = request.getRemoteAddr();
 
-	Cookie[] cks = request.getCookies();
+	Calendar cal = Calendar.getInstance();
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일 HH시 mm분 ss초");
+	String date = "첫 방문이시군요!";
 	
+	Date now = new Date();
+
+	Cookie[] cks = request.getCookies();
 	String name = "";
 	String value = "";
+	String popcheck = "false";
 	if(cks != null) {
 		for(int i = 0; i < cks.length; i++){
-			name = cks[i].getName();
-			value = cks[i].getValue();
+			name = URLDecoder.decode(cks[i].getName());
+			value = URLDecoder.decode(cks[i].getValue());
+			if(name.equals("check24") && value.equals(ip)){
+				popcheck = "true";
+			}
+
+			if(name.equals("visit") && value.equals(ip)) {
+				value = URLDecoder.decode(cks[i].getValue());
+				//date = sdf.format(cal.getTime());
+			}
 		}//for
 	}//if
 	
-	String popcheck = "false";
-	if(name.equals("check24") && value.equals(ip)){
-		popcheck = "true";
-	}
-
-	/*
-	Cookie[] cks = request.getCookies();
 	
+	
+	
+	/*
 	String key = "";
 	String value = "";
 	if(cks != null) {
@@ -36,7 +46,8 @@
 		}
 	}
 	
-	String str = "첫 방문이시군요!"; */
+	
+	*/
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -52,6 +63,11 @@
 			popup();
 		}
 	}
+	
+	setInterval(function() {
+		var now = new Date();
+		document.getElementById('toLocale').innerHTML = now.toLocaleString();
+	}, 1000);
 	
 	function popup(){
 		var width = '500';
@@ -71,7 +87,8 @@
         </article>
         <article id="minMenu">
             <h2>안녕하세요.</h2>
-            <h3>마지막 접속일 : </h3>
+            <h3>현재 시각</h3>
+            <h3 id="toLocale"><%=now.toLocaleString() %></h3>
             <ul>
                 <li>아래에 기능들이 추가될 것임</li>
                 <li><a href="formTest.jsp">폼 테스트</a></li>
@@ -84,15 +101,10 @@
 <%@include file="footer.jsp" %>
 </body>
 </html>
-<%/*
-	 Calendar cal = Calendar.getInstance();
-	SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일 HH시 mm분 ss초");
-	String date = sdf.format(cal.getTime());
-	date = URLEncoder.encode(date);
-	
-	Cookie ck = new Cookie(ip, date);
+<%
+	Cookie ck = new Cookie("visit", ip);
 	ck.setMaxAge(60 * 60 * 24 * 30);
 	
-	response.addCookie(ck); 
-	*/
+	response.addCookie(ck);
+	
 %>

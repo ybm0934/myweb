@@ -9,6 +9,10 @@ public class MemberDAO {
 	ResultSet rs;
 	ConnectionPoolMgr pool;
 
+	public static final int LOGIN_OK = 1;
+	public static final int ID_NONE = 2;
+	public static final int PWD_DISCORD = 3;
+
 	public MemberDAO() {
 		pool = new ConnectionPoolMgr();
 	}
@@ -18,7 +22,7 @@ public class MemberDAO {
 		int cnt = 0;
 
 		try {
-			System.out.println("memberJoin() 실행\r\n");
+			System.out.println("insertMember() 실행\r\n");
 
 			con = pool.getConnection();
 
@@ -46,8 +50,9 @@ public class MemberDAO {
 		}
 
 		return cnt;
-	}// memberJoin
+	}// insertMember
 
+	// 아이디 중복 체크
 	public boolean idCheck(String id) throws SQLException {
 		boolean flag = false;
 
@@ -75,5 +80,89 @@ public class MemberDAO {
 
 		return flag;
 	}// idCheck
+
+	// 로그인 체크
+	public int loginCheck(String id, String pwd) throws Exception {
+		int cnt = -1;
+
+		try {
+			System.out.println("loginCheck() 실행\r\n");
+
+			con = pool.getConnection();
+
+			String sql = "select password from member where id = ?";
+			ps = con.prepareStatement(sql);
+			ps.setString(1, id);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				String dbPwd = rs.getString("password");
+				if (dbPwd.equals(pwd)) {
+					cnt = LOGIN_OK;
+				} else {
+					cnt = PWD_DISCORD;
+				}
+			} else {
+				cnt = ID_NONE;
+			}
+
+			System.out.println("cnt 값 : " + cnt);
+			System.out.println("파라미터 id : " + id);
+			System.out.println("파라미터 pwd : " + pwd + "\r\n");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.dbClose(rs, ps, con);
+		}
+
+		return cnt;
+	}// loginCheck
+
+	// 회원 정보 가져오기
+	public MemberDTO selectMember(String userid) throws Exception {
+		MemberDTO dto = new MemberDTO();
+
+		try {
+			System.out.println("selectMember() 실행\r\n");
+
+			con = pool.getConnection();
+
+			String sql = "select * from member where id = ?";
+			ps = con.prepareStatement(sql);
+			ps.setString(1, userid);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				String id = rs.getString("id");
+				String name = rs.getString("name");
+				String birthday = rs.getString("birthday");
+				String gender = rs.getString("gender");
+				String email = rs.getString("email");
+				String tel = rs.getString("tel");
+				String zipcode = rs.getString("zipcode");
+				String address1 = rs.getString("address1");
+				String address2 = rs.getString("address2");
+				Timestamp regdate = rs.getTimestamp("regdate1");
+
+				dto.setId(id);
+				dto.setName(name);
+				dto.setBirthday(birthday);
+				dto.setGender(gender);
+				dto.setEmail(email);
+				dto.setTel(tel);
+				dto.setZipcode(zipcode);
+				dto.setAddress1(address1);
+				dto.setAddress2(address2);
+				dto.setRegdate(regdate);
+			}
+			
+			System.out.println("파라미터 userid = " + userid);
+			System.out.println("입력값 dto = " + dto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.dbClose(rs, ps, con);
+		}
+
+		return dto;
+	}// selectMember
 
 }

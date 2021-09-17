@@ -1,0 +1,45 @@
+@charset "UTF-8";
+
+#header {
+    text-align: center;
+}
+
+#login_tb {
+    border: 1px solid lightgray;
+    margin: 0 auto;
+    width: 100%;
+    padding: 30px;
+    border-collapse: collapse;
+}
+
+#login_tb caption {
+	visibility: hidden;
+}
+
+#login_tb tr th {
+    border: 1px solid lightgray;
+    padding: 15px;
+}
+
+#login_tb tr td {
+    border: 1px solid lightgray;
+    padding: 15px;
+}
+
+#error {
+	color: red;
+}
+
+.textbox {
+    width: 70%;
+    padding: 10px;
+}
+
+.btn {
+    width: 50%;
+    height: 50px;
+    cursor: pointer;
+    background-color: black;
+    color: white;
+    font-size: 1.3em;
+}
