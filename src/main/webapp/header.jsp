@@ -13,6 +13,15 @@
 	System.out.println("isLogin = " + isLogin);
 %>
 <script>
+	<%-- window.onload = function(){
+		var isLogin = document.getElementById('isLogin').value;
+		
+		if(isLogin == 'false'){
+			alert('로그인 하셔야 합니다.');
+			location.href = '<%=request.getContextPath()%>/index.jsp';
+		}
+	} --%>
+
 	function login(){
 		var href = '<%=request.getContextPath() %>/member/login.jsp';
 		var title = 'LOGIN';
@@ -24,6 +33,7 @@
 	}
 </script>
 <header>
+<input type="hidden" id="isLogin" value="<%=isLogin %>">
         <div>
 			<% if(isLogin == false){ %>
         	<a href="#" onclick="login();">로그인</a>

@@ -1,6 +1,7 @@
-<%@page import="java.util.*"%>
+<%@page import="java.io.*"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<jsp:useBean id="wf" class="yong.wf.WebFolderDAO" scope="session" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,16 +9,6 @@
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/test/css/mainLayout.css">
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/webFolder/css/webFolder.css">
-<script type="text/javascript">
-	function goDir(name){
-		location.href = '<%=request.getContextPath() %>/webFolder/webFolder.jsp?path=' + name;
-	}
-	
-	function goDownload(name) {
-		location.href = '<%=request.getContextPath() %>/webFolder/download.jsp?name=' + name;
-	}
-	
-</script>
 </head>
 <body>
 <%@include file="/header.jsp" %>
@@ -31,16 +22,15 @@
 		<%
 	}
 %>
-<jsp:useBean id="wf" class="yong.wf.WebFolderDAO" scope="session" />
 <%
-	String path = request.getParameter("path");
-
 	wf.setUserid(userid);
 	wf.userFolderExist();
 	
-	Map<Integer, String> map = wf.seeker(path);
-	System.out.println("map : " + map.size());
-	Iterator<Integer> iter = map.keySet().iterator();
+	String cp = request.getParameter("cp");
+	if(cp == null || cp.equals("")) {
+		cp = userid;
+	}
+	wf.setCrpath(cp);
 %>
 <section id="f_sec">
 	<article>
@@ -56,8 +46,8 @@
 	</article>
 	<article>
 		<fieldset>
-			<input type="button" value="파일 올리기">
-			<input type="button" value="폴더만들기">
+			<input type="button" value="파일 올리기" onclick="openFileUpload();">
+			<input type="button" value="폴더 만들기" onclick="openFolderMake();">
 		</fieldset>
 		<fieldset>
 			<legend>탐색기</legend>
@@ -73,28 +63,56 @@
 					<tfoot></tfoot>
 					<tbody>
 					<%
-					while(iter.hasNext()) {
-						int key = iter.next();
-						String value = map.get(key);
-						String type = value.substring(0, value.indexOf("$"));
-						String name = value.substring(value.lastIndexOf("\\") + 1);
+					if(!wf.getCrpath().equals(wf.getUserid())) {
+						int point = wf.getCrpath().lastIndexOf("/");
+						String upcp = wf.getCrpath().substring(0, point);
 					%>
 						<tr>
-							<th>
-								<%=type %>
-							</th>
-							<td>
-								<% if(type.equals("[폴더]")) { %>
-									<a href="#" onclick="goDir('<%=name %>');"><%=name %></a>
-								<% }else { %>
-									<a href="#" onclick="goDownload('<%=name %>');"><%=name %></a>
-								<% } %>
-							</td>
-							<td>
-								<input type="button" name="del" id="del" class="del_btn" value="Delete">	
+							<td colspan="3" align="left">
+								<a href="/myweb/webFolder/webFolder.jsp?cp=<%=upcp %>">상위로...</a>
 							</td>
 						</tr>
-					<% } %>
+					<%} %>
+					<%
+					File f = new File(wf.USERS_HOME + "\\" + wf.getCrpath());
+					
+					File[] files = f.listFiles();
+					
+					if(files == null || files.length == 0){
+						%>
+						<tr>
+							<td colspan="3" align="center">
+							등록된 파일이 없습니다.
+							</td>
+						</tr>
+						<%
+					}else {
+						for(int i = 0; i < files.length; i++) {
+							%>
+							<tr>
+								<th><%=files[i].isDirectory() ? "[폴더]" : "[파일]" %></th>
+								<td>
+								<%
+								if(files[i].isFile()) {
+								%>
+									<a href="/myweb/webFolder/upload/<%=wf.getCrpath() %>/<%=files[i].getName() %>"><%=files[i].getName() %></a>
+								<%
+								}else {
+								%>
+									<a href="/myweb/webFolder/webFolder.jsp?cp=<%=wf.getCrpath() %>/<%=files[i].getName() %>"><%=files[i].getName() %></a>
+								<%
+								}
+								%>
+								</td>
+								<td>
+									<input type="button" name="del" class="btn" value="삭제" onclick="deleteFolder('<%=files[i].getName() %>')">
+								</td>
+								<td></td>
+							</tr>
+							<%
+						}
+					}
+					%>
 					</tbody>
 				</table>
 			</form>
@@ -103,4 +121,22 @@
 </section>
 <%@include file="/footer.jsp" %>
 </body>
+<script type="text/javascript">
+	function openFileUpload() {
+		window.open('<%=request.getContextPath()%>/webFolder/fileUpload.jsp', 'fileUpload', 'width=350, height=250');
+	}
+	
+	function openFolderMake() {
+		window.open('<%=request.getContextPath()%>/webFolder/folderUpload.jsp?cp=<%=wf.getCrpath() %>', 'folderUpload', 'width=350, height=250');
+	}
+	
+	function deleteFolder(fName) {
+		var str = '하위 폴더까지 전부 삭제됩니다. 삭제하시겠습니까?';
+		if(confirm(str)){
+			location.href = '<%=request.getContextPath()%>/webFolder/fileDelete_ok.jsp?fName=' + fName + '&cp=<%=wf.getCrpath() %>';
+		}else {
+			return false;
+		}
+	}
+</script>
 </html>

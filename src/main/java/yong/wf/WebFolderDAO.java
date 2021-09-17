@@ -9,7 +9,6 @@ public class WebFolderDAO {
 
 	private String userid;
 	private String crpath;
-	private String type;
 	private long totalSize, usedSize, freeSize; // 총 용량, 사용 용량, 남은 용량
 
 	public WebFolderDAO() {
@@ -89,33 +88,54 @@ public class WebFolderDAO {
 		} // for
 	}// settingUsedSize
 
-	// 탐색기 메서드
-	public Map<Integer, String> seeker(String path) {
-		String root = USERS_HOME + "\\" + userid;
-		if (path != null)
-			root += "\\" + path;
-		File f = new File(root);
+	// 폴더 생성 메서드
+	public boolean userFolderMk(String fName) {
+		System.out.println("userFolderMk() 실행");
+		System.out.println("매개변수 fName : " + fName);
 
-		Map<Integer, String> map = new HashMap<Integer, String>();
+		File f = new File(USERS_HOME + "\\" + crpath + "\\" + fName);
 
-		if (f.exists()) {
-			File files[] = f.listFiles();
-			System.out.println("files[] length = " + files.length);
-			for (int i = 0; i < files.length; i++) {
-				String type = files[i].isDirectory() ? "[폴더]" : "[파일]";
-				map.put(i, type + "$" + root + "\\" + files[i].getName());
-			} // for
+		boolean access = false;
+		if (!f.exists() && fName != null) {
+			access = true;
+			f.mkdir();
+		}
+
+		return access;
+	}// userFolderMk
+
+	// 폴더 삭제 메서드
+	public boolean userFolderDel(String fName) {
+		System.out.println("userFolderDel() 실행");
+
+		File f = new File(USERS_HOME + "\\" + crpath + "\\" + fName);
+		System.out.println("현재 경로 : " + USERS_HOME + "\\" + crpath + "\\" + fName);
+
+		boolean access = false;
+		if (f.exists() && fName != null) {
+			File[] files = f.listFiles();
+
+			if (files != null) {
+				System.out.println("files 크기 : " + files.length);
+
+				for (int i = 0; i < files.length; i++) {
+					if (files[i].isFile()) {
+						files[i].delete();
+						System.out.println("파일 삭제 완료");
+					} else {
+						userFolderDel(fName + "\\" + files[i].getName());
+						System.out.println("폴더 삭제 완료");
+					}
+					files[i].delete();
+
+				} // for
+				f.delete();
+
+				access = true;
+			} // if
 		} // if
 
-		return map;
-	}// seeker
-	
-	public void download(String name) {
-		System.out.println("다운로드 실행");
-	}
-	
-	public void upload() {
-		
-	}
+		return access;
+	}// userFolderDel
 
 }
