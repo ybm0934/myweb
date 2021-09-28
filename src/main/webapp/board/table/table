@@ -1,0 +1,23 @@
+--게시판 테이블
+CREATE TABLE board(
+    NO number PRIMARY KEY, --글 번호
+    NAME varchar2(15) NOT NULL, --작성자
+    pwd varchar2(15) NOT NULL, --비밀번호
+    title varchar2(100) NOT NULL, --제목
+    CONTENT clob NOT NULL, --내용
+    COUNT number DEFAULT 0, --조회수
+    regdate date DEFAULT SYSDATE, --등록일
+    del char DEFAULT 'N', --글 삭제 여부
+    groupno number DEFAULT 0, --답변형 그룹 번호
+    step number DEFAULT 0, --답변형 글 단계
+    sortno number DEFAULT 0, --답변형 글 정렬
+    fileName varchar2(50) NULL, --업로드 파일명
+    fileSize number DEFAULT 0, --업로드 파일 크기
+    downCount number DEFAULT 0 --다운로드 횟수
+);
+
+--게시판 시퀀스
+create sequence board_seq
+start with 1
+increment by 1
+nocycle;
