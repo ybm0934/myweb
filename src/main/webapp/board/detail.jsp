@@ -1,5 +1,8 @@
-<%@page import="yong.board.BoardDTO"%>
-<%@page import="yong.board.BoardDAO"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="yong.board.CommentDTO"%>
+<%@page import="java.util.ArrayList"%>
+<%@ page import="yong.board.BoardDTO"%>
+<%@ page import="yong.board.BoardDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
@@ -14,6 +17,9 @@
 	int downCount = boardDto.getDownCount();
 	
 	String attatch = (fileName == null) ? "" : fileName + "(" + downCount + ")";
+	
+	ArrayList<CommentDTO> list = boardDao.commentList();
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -23,74 +29,82 @@
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/board/css/detail.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function(){
-        	$('#list_btn').click(function(){
-        		location.href = '<%=request.getContextPath() %>/board/list.jsp';
-        	});
-        	
-        	// 답변 쓰기 이동
-        	$('#reWrite_btn').click(function(){
-        		location.href = '<%=request.getContextPath() %>/board/reWrite.jsp?no=<%=no %>&groupno=<%=boardDto.getGroupno()%>&step=<%=boardDto.getStep()%>&sortno=<%=boardDto.getSortno()%>&title=<%=boardDto.getTitle()%>';
-        	});
-            
-            // 댓글 등록 Ajax
-            $('#reply_regit_btn').click(function(){
-                $.ajax({
-                   url : '<%=request.getContextPath() %>/board/reply.jsp',
-                   type : 'POST',
-                   data : {},
-                   datatype : 'JSON',
-                   success : function(data){
-                       
-                   },
-                   error : function(){
-                       alert('댓글 등록 실패');
-                   }
-                });
-
-            }) // 댓글 등록 Ajax
-
-            // 대댓글 창 띄우기
-            var flag = false;
-
-            $('#number').click(function(){
-                var recomment = '';
-                    recomment += '<tr class="rr_tr">';
-                    recomment +=    '<th>닉네임</th>';
-                    recomment +=    '<td>';
-                    recomment +=        '<input type="text" name="name" class="textbox" id="name" placeholder="닉네임 입력" spellcheck="false">';
-                    recomment +=    '</td>';
-                    recomment +=    '<th>비밀번호</th>';
-                    recomment +=    '<td>';
-                    recomment +=        '<input type="password" name="pwd" class="textbox" id="pwd" placeholder="비밀번호 입력">';
-                    recomment +=    '</td>';
-                    recomment += '</tr>';
-                    recomment += '<tr class="underline_tr rr_tr">';
-                    recomment +=    '<td colspan="4" style="text-align: right;">';
-                    recomment +=        '<textarea class="re_textarea" id="write_rere_textarea" placeholder="~님께 답글쓰기" spellcheck="false"></textarea>';
-                    recomment +=        '<br><br>';
-                    recomment +=        '<input type="button" class="re_btn" id="rere_cancel_btn" value="취소">&nbsp;';
-                    recomment +=        '<input type="button" class="re_btn regit_btn" id="rere_regit_btn" value="등록">';
-                    recomment +=    '</td>';
-                    recomment += '</tr>';
-
-                    if(flag == false) {
-                        $('tr').has('#number').after(recomment);
-                    }else {
-                        return false;
-                    }
-                    
-                    flag = true;
-                
-                $('#rere_cancel_btn').click(function(){
-                    $('tr').has('#number').siblings('.rr_tr').remove();
-                    flag = false;
-                });
-            }); // 대댓글 창 띄우기
-        });
-    </script>
+	    $(document).ready(function(){
+	    	$('#list_btn').click(function(){
+	    		location.href = '<%=request.getContextPath() %>/board/list.jsp';
+	    	});
+	    	
+	    	// 답변 쓰기 이동
+	    	$('#reWrite_btn').click(function(){
+	    		location.href = '<%=request.getContextPath() %>/board/reWrite.jsp?no=<%=no %>&groupno=<%=boardDto.getGroupno()%>&step=<%=boardDto.getStep()%>&sortno=<%=boardDto.getSortno()%>&title=<%=boardDto.getTitle()%>';
+	    	});
+	        
+	        // 댓글 등록 Ajax
+	        $('#reply_regit_btn').click(function(){
+	            $.ajax({
+	               url : '<%=request.getContextPath() %>/board/reply_ok.jsp',
+	               type : 'POST',
+	               data : {
+	            	   ogNo : <%=no %>,
+	            	   name : $('#name').val(),
+	            	   pwd : $('#pwd').val(),
+	            	   comment : $('#comment').val()
+	               },
+	               datatype : 'JSON',
+	               success : function(data){
+	                   $('#reply_table tbody').html(data);
+	                   $('#name').val('');
+	                   $('#pwd').val('');
+	                   $('#comment').val('');
+	               },
+	               error : function(){
+	                   alert('댓글 등록 실패');
+	               }
+	            });
+	
+	        }) // 댓글 등록 Ajax
+	
+	        // 대댓글 창 띄우기
+	        var flag = false;
+	
+	        $('').click(function(){
+	            var recomment = '';
+	                recomment += '<tr class="rr_tr">';
+	                recomment +=    '<th>닉네임</th>';
+	                recomment +=    '<td>';
+	                recomment +=        '<input type="text" name="name" class="textbox" id="name" placeholder="닉네임 입력" spellcheck="false">';
+	                recomment +=    '</td>';
+	                recomment +=    '<th>비밀번호</th>';
+	                recomment +=    '<td>';
+	                recomment +=        '<input type="password" name="pwd" class="textbox" id="pwd" placeholder="비밀번호 입력">';
+	                recomment +=    '</td>';
+	                recomment += '</tr>';
+	                recomment += '<tr class="underline_tr rr_tr">';
+	                recomment +=    '<td colspan="4" style="text-align: right;">';
+	                recomment +=        '<textarea class="re_textarea" id="write_rere_textarea" placeholder="~님께 답글쓰기" spellcheck="false"></textarea>';
+	                recomment +=        '<br><br>';
+	                recomment +=        '<input type="button" class="re_btn" id="rere_cancel_btn" value="취소">&nbsp;';
+	                recomment +=        '<input type="button" class="re_btn regit_btn" id="rere_regit_btn" value="등록">';
+	                recomment +=    '</td>';
+	                recomment += '</tr>';
+	
+	                if(flag == false) {
+	                    $('tr').has('#number').after(recomment);
+	                }else {
+	                    return false;
+	                }
+	                
+	                flag = true;
+	            
+	            $('#rere_cancel_btn').click(function(){
+	                $('tr').has('#number').siblings('.rr_tr').remove();
+	                flag = false;
+	            });
+	        }); // 대댓글 창 띄우기
+	    });
+	</script>
 </head>
-<body>
+<body oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
     <div id="wrap">
 		<h1>글 상세보기</h1>
 		<table id="write_table">
@@ -146,52 +160,34 @@
                 </tr>
                 <tr>
                     <td colspan="4" style="text-align: right;">
-                        <textarea class="re_textarea" id="write_reply_textarea" placeholder="댓글을 입력해주세요." spellcheck="false"></textarea>
+                        <textarea name="comment" class="re_textarea" id="comment" placeholder="댓글을 입력해주세요." spellcheck="false"></textarea>
                         <br><br>
                         <input type="button" class="re_btn regit_btn" id="reply_regit_btn" value="등록">
                     </td>
                 </tr>
 			</tfoot>
 			<tbody>
-                <tr class="underline_tr">
-                    <th>지존법사</th>
-                    <td colspan="3">2020.02.02.</td>
-                </tr>
-                <tr class="underline_tr">
-                    <td colspan="4">
-                        <span class="comment">
-                            댓글을 썼습니다.
-                            <br>
-                            댓글을 썼습니다.
-                            <br>
-                            댓글을 썼습니다.
-                            <br>
-                            댓글을 썼습니다.
-                            <br>
-                            댓글을 썼습니다.
-                        </span>
-                        <br><br>
-                        <span class="re_spn" id="number">답글쓰기</span>
-                    </td>
-                </tr>
-                <tr class="underline_tr">
-                    <td colspan="4">
-                        <span class="comment">
-                            댓글을 썼습니다.
-                            <br>
-                            댓글을 썼습니다.
-                            <br>
-                            댓글을 썼습니다.
-                            <br>
-                            댓글을 썼습니다.
-                            <br>
-                            댓글을 썼습니다.
-                        </span>
-                        <br><br>
-                        <span class="re_spn" id="number2">답글쓰기</span>
-                    </td>
-                </tr>
-            </tbody>
+			<%
+				if(list != null) {
+					for(int i = 0; i < list.size(); i++) {
+						CommentDTO comDto = list.get(i);
+			%>
+				<tr class="re_tbody_first_tr">
+					<th style="text-align: left;"><%=comDto.getName() %></th>
+					<td colspan="3" class="re_tbody_first_tr_td"><%=sdf.format(comDto.getRegdate()) %></td>
+				</tr>
+				<tr class="re_tbody_second_tr">
+				    <td colspan="4">
+				        <span class="comment"><%=comDto.getContent() %></span>
+						<br><br>
+						<span class="re_spn" id="re<%=comDto.getOgNo() %>" onclick="rerefunc();">답글쓰기</span>
+				    </td>
+				</tr>
+			<%
+					}
+				}
+			%>
+			</tbody>
 		</table>
     </div>
 </body>

@@ -127,8 +127,18 @@ tfoot tr td {
     padding: 15px;
 }
 
-.underline_tr th, .underline_tr td {
-    border-bottom: 1px solid lightgray;
+.re_tbody_first_tr {
+	border-bottom: 1px solid lightgray;
+	background-color: #f5f5f5;
+}
+
+.re_tbody_second_tr {
+	border-bottom:1px solid lightgray;
+}
+
+.re_tbody_first_tr_td {
+	color:gray;
+	font-size:0.8em;
 }
 
 .re_textarea {

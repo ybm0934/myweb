@@ -15,6 +15,7 @@ public class sadlkf {
  * 전화번호
  * 이메일
  * 주소
+ * 탈퇴여부
  * 
  * */
 

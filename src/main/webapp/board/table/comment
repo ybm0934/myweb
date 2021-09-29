@@ -1,0 +1,18 @@
+--댓글 테이블
+CREATE TABLE comments
+(
+    no         NUMBER PRIMARY KEY,
+    ogNo       NUMBER NOT NULL,
+    groupNo    NUMBER DEFAULT 0,
+    sortNo     NUMBER DEFAULT 0,
+    name       VARCHAR2 (20) NOT NULL,
+    pwd        VARCHAR2 (20) NOT NULL,
+    content    CLOB NOT NULL,
+    regdate    DATE DEFAULT SYSDATE
+);
+
+--댓글 시퀀스
+CREATE SEQUENCE comments_seq
+START WITH 1
+INCREMENT BY 1
+NOCYCLE;

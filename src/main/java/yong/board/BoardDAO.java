@@ -125,7 +125,7 @@ public class BoardDAO {
 				int groupno = rs.getInt("groupno");
 				int step = rs.getInt("step");
 				int sortno = rs.getInt("sortno");
-				
+
 				// 조회 수 증가
 				sql = "update board set count = count + 1 where no = ?";
 				ps = con.prepareStatement(sql);
@@ -159,7 +159,7 @@ public class BoardDAO {
 	// 수정
 	// 삭제
 
-	// 답글
+	// 답글 쓰기
 	public int reply(BoardDTO boardDto) throws SQLException {
 		int cnt = 0;
 
@@ -197,11 +197,81 @@ public class BoardDAO {
 		}
 
 		return cnt;
-	}//
+	}// reply
 
-	// 댓글
-	public void comment() {
+	// 댓글 쓰기
+	public int commentWrite(CommentDTO comDto) throws SQLException {
+		int cnt = 0;
+
+		try {
+			System.out.println("commentWrite 실행\r\n");
+
+			con = pool.getConnection();
+
+			String sql = "INSERT INTO comments(no, ogno, groupno, name, pwd, content, regdate) "
+					+ "VALUES(comments_seq.nextval, ?, comments_seq.nextval, ?, ?, ?, sysdate)";
+			ps = con.prepareStatement(sql);
+			ps.setInt(1, comDto.getOgNo());
+			ps.setString(2, comDto.getName());
+			ps.setString(3, comDto.getPwd());
+			ps.setString(4, comDto.getContent());
+
+			cnt = ps.executeUpdate();
+
+			System.out.println("댓글쓰기 결과 cnt = " + cnt);
+			System.out.println("댓글쓰기 파라미터 comDto = " + comDto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.dbClose(ps, con);
+		}
+
+		return cnt;
+	}// commentWrite
+
+	// 댓글 list
+	public ArrayList<CommentDTO> commentList() throws SQLException {
+		ArrayList<CommentDTO> list = new ArrayList<CommentDTO>();
+
+		try {
+			System.out.println("commentList 실행\r\n");
+			
+			con = pool.getConnection();
+			
+			String sql = "SELECT * FROM comments ORDER BY no ASC";
+			ps = con.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				int no = rs.getInt("no");
+				int ogNo = rs.getInt("ogNo");
+				int groupNo = rs.getInt("groupNo");
+				int sortNo = rs.getInt("sortNo");
+				String name = rs.getString("name");
+				String pwd = rs.getString("pwd");
+				String content = rs.getString("content");
+				Timestamp regdate = rs.getTimestamp("regdate");
+				
+				CommentDTO comDto = new CommentDTO();
+				comDto.setNo(no);
+				comDto.setOgNo(ogNo);
+				comDto.setGroupNo(groupNo);
+				comDto.setSortNo(sortNo);
+				comDto.setName(name);
+				comDto.setPwd(pwd);
+				comDto.setContent(content);
+				comDto.setRegdate(regdate);
+				
+				list.add(comDto);
+			}
+			
+			System.out.println("댓글 list 결과 list.size = " + list.size() + "\r\n");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+		}
 		
-	}
+		return list;
+	}// commentList
 
 }
