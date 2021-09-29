@@ -39,7 +39,8 @@
 
 #list_table {
     margin: 30px auto;
-    border: 1px solid lightgray;
+    border-top: 2px solid lightgray;
+    border-bottom: 2px solid lightgray;
     border-collapse: collapse;
     width: 100%;
 }
@@ -49,9 +50,8 @@
 }
 
 #list_table thead tr th {
-    border: 1px solid lightgray;
     background-color: #f7f7f7;
-    padding: 10px;
+    padding: 13px;
 }
 
 #list_table tfoot tr td {
@@ -63,25 +63,26 @@
 }
 
 #list_table tbody tr td {
-    border: 1px solid lightgray;
+    border-top: 1px solid lightgray;
 }
 
 #list_table tbody tr td:not(:nth-child(2)) {
     text-align: center;
-    padding: 10px;
+    padding: 13px;
 }
 
 #list_table tbody tr td:nth-child(2) {
     padding-left: 15px;
 }
 
+#list_table tbody tr:hover {
+	background-color: #f7f7f7;
+	font-weight: bold;
+}
+
 .title_link {
 	text-decoration: none;
 	color: black;
-}
-
-.title_link:hover {
-	font-weight: bold;
 }
 
 

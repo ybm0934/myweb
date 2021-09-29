@@ -54,7 +54,7 @@
 		});
 	</script>
 </head>
-<body>
+<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
     <div id="wrap">
         <form name="list" method="post" action="<%=request.getContextPath() %>/board/list.jsp">
 	        <h1>
@@ -86,7 +86,14 @@
 	                <tr>
 	                	<td><%=dto.getNo() %></td>
 	                	<td>
-	                		<a href="#" class="title_link"><%=dto.getTitle() %></a>
+	                		<%
+	                		if(dto.getStep() != 0){
+		                		for(int j = 0; j < dto.getStep(); j++){ %>
+		                			&nbsp;&nbsp;
+		                		<%} %>
+		                		└
+	                		<%} %>
+	                		<a href="<%=request.getContextPath() %>/board/detail.jsp?no=<%=dto.getNo() %>" class="title_link"><%=dto.getTitle() %></a>
 	                	</td>
 	                	<td><%=dto.getName() %></td>
 	                	<td><%=sdf.format(dto.getRegdate()) %></td>
@@ -101,6 +108,7 @@
 	        </div>
 	        <div class="list_paging_div">
 	        	<%if(firstPage > 1) { %>
+	        		<a href="<%=request.getContextPath() %>/board/list.jsp?currentPage=<%=1%>&category=<%=category%>&keyword=<%=keyword%>" class="paging_tag">&lt;&lt;</a>
 	        		<a href="<%=request.getContextPath() %>/board/list.jsp?currentPage=<%=firstPage - 1%>&category=<%=category%>&keyword=<%=keyword%>" class="paging_tag">PREV</a>
 	       		<%} %>
 	       		<% for(int i = firstPage; i <= lastPage; i++){
@@ -114,6 +122,7 @@
 	       		%>
 	       		<%if(lastPage < totalPage){ %>
 	       			<a href="<%=request.getContextPath() %>/board/list.jsp?currentPage=<%=lastPage + 1%>&category=<%=category%>&keyword=<%=keyword%>" class="paging_tag">NEXT</a>
+	       			<a href="<%=request.getContextPath() %>/board/list.jsp?currentPage=<%=totalPage%>&category=<%=category%>&keyword=<%=keyword%>" class="paging_tag">&gt;&gt;</a>
 	       		<%} %>
 	        </div>
 	        <div class="list_search_div">
